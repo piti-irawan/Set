@@ -10,6 +10,7 @@ import UIKit
 
 class SetCardView: UIView {
     static let cardAspectRatio = 0.625
+    static let frameInset: CGFloat = 0.5
     static let cornerRadiusToBoundsHeight: CGFloat = 0.06
     static let lineWidthToBoundsHeight: CGFloat = 0.06
     static let halfRectHeightToBoundsHeight: CGFloat = 0.06
@@ -42,13 +43,13 @@ class SetCardView: UIView {
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
         roundedRect.addClip()
         switch card.state {
-        case .isInDeck: UIColor.darkGray.setFill()
-        case .isBeingDealt: UIColor.darkGray.setFill()
+        case .isInDeck: UIColor.lightGray.setFill()
+        case .isBeingDealt: UIColor.lightGray.setFill()
         case .isInPlay: UIColor.white.setFill()
         case .isSelected: UIColor.white.setFill()
         case .isMismatched: UIColor.orange.setFill()
         case .isMatched: UIColor.white.setFill()
-        case .isDiscarded: UIColor.darkGray.setFill()
+        case .isDiscarded: UIColor.lightGray.setFill()
         }
         roundedRect.fill()
         if card.state == .isSelected || card.state == .isMismatched || card.state == .isMatched {
@@ -60,7 +61,12 @@ class SetCardView: UIView {
         if card.state == .isInPlay || card.state == .isSelected || card.state == .isMismatched || card.state == .isMatched {
             var path = UIBezierPath()
             var transforms = [CGAffineTransform]()
-            let pathRect = CGRect(x: bounds.midX - 2.0 * halfRectHeight, y: bounds.midY - halfRectHeight, width: 4.0 * halfRectHeight, height: 2.0 * halfRectHeight)
+            let pathRect = CGRect(
+                x: bounds.midX - 2.0 * halfRectHeight,
+                y: bounds.midY - halfRectHeight,
+                width: 4.0 * halfRectHeight,
+                height: 2.0 * halfRectHeight
+            )
             switch card.shape {
             case .diamond:
                 path = diamondPath(in: pathRect)

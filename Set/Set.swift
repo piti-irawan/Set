@@ -128,11 +128,7 @@ class Set {
         } else {
             colorSet = false
         }
-        if (numberSet && shapeSet && shadingSet && colorSet) {
-            return true
-        } else {
-            return false
-        }
+        return numberSet && shapeSet && shadingSet && colorSet
     }
     
     func dealThreeMoreCards() {

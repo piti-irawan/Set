@@ -62,7 +62,7 @@ class FlyawayBehavior: UIDynamicBehavior {
                 push.angle = (2.0 * CGFloat.pi) * (CGFloat(arc4random_uniform(UInt32.max)) / CGFloat(UInt32.max))
             }
         }
-        push.magnitude = CGFloat(6.0) + CGFloat(2.0) * (CGFloat(arc4random_uniform(UInt32.max)) / CGFloat(UInt32.max))
+        push.magnitude = CGFloat(1.0) + CGFloat(2.0) * (CGFloat(arc4random_uniform(UInt32.max)) / CGFloat(UInt32.max))
         push.action = { [unowned push, weak self] in
             self?.removeChildBehavior(push)
         }

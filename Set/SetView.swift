@@ -27,7 +27,7 @@ class SetView: UIView {
                 for case let (index, cardView) as (Int, SetCardView) in visibleSubviews.enumerated() {
                     if cardView.card.state != .isBeingDealt {
                         if let frame = grid[index] {
-                            cardView.frame = frame.insetBy(dx: 0.5, dy: 0.5)
+                            cardView.frame = frame.insetBy(dx: SetCardView.frameInset, dy: SetCardView.frameInset)
                             cardView.setNeedsDisplay()
                         }
                     }
@@ -43,7 +43,7 @@ class SetView: UIView {
                                 delay: 0.25 * delayMultiplier,
                                 options: [],
                                 animations: {
-                                    cardView.frame = frame.insetBy(dx: 0.5, dy: 0.5)
+                                    cardView.frame = frame.insetBy(dx: SetCardView.frameInset, dy: SetCardView.frameInset)
                                 },
                                 completion: { finished in
                                     UIView.transition(

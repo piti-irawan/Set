@@ -15,46 +15,31 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     private lazy var animator = UIDynamicAnimator(referenceView: view)
     private lazy var flyawayBehavior = FlyawayBehavior(in: animator)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        animator.delegate = self
-    }
-    
-    @IBOutlet private weak var scoreLabel: UILabel! {
-        didSet {
-            updateScoreLabel()
-        }
-    }
-    
     @IBOutlet weak var setView: SetView! {
         didSet {
-            let frame = CGRect(
-                x: dealButton.frame.origin.x - setView.frame.origin.x,
-                y: dealButton.frame.origin.y - setView.frame.origin.y,
-                width: dealButton.bounds.width,
-                height: 2.0 * dealButton.bounds.height
-            )
             for card in set.cards {
-                let cardView = SetCardView(card: card, frame: frame)
+                let cardView = SetCardView(card: card, frame: CGRect())
                 setView.addSubview(cardView)
                 let tap = UITapGestureRecognizer(target: self, action: #selector(chooseCard(_:)))
                 cardView.addGestureRecognizer(tap)
             }
-            updateSetView()
         }
     }
     
-    @IBOutlet weak var dealButton: UIButton! {
-        didSet {
-            updateDealButton()
-        }
+    @IBOutlet weak var dealButton: UIButton!
+    
+    @IBOutlet private weak var scoreLabel: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        animator.delegate = self
+        updateSetView()
     }
     
     @objc func chooseCard(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended && set.cardsBeingDealt.count == 0 && set.matchedCards.count == 0 {
             if let cardView = sender.view as? SetCardView {
-                let card = cardView.card
-                set.chooseCard(card)
+                set.chooseCard(cardView.card)
                 updateViewFromModel()
                 
             }
@@ -69,17 +54,9 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     }
     
     private func updateViewFromModel() {
-        updateScoreLabel()
         updateSetView()
         updateDealButton()
-    }
-    
-    private func updateScoreLabel() {
-        if set.score == 1 {
-            scoreLabel.text = "1 Set"
-        } else {
-            scoreLabel.text = "\(set.score) Sets"
-        }
+        updateScoreLabel()
     }
     
     private func updateSetView() {
@@ -89,66 +66,59 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
             view.removeFromSuperview()
         }
         for card in set.cards {
-            for index in cardViews.indices {
-                if let cardView = cardViews[index] as? SetCardView {
-                    if cardView.card == card {
-                        setView.addSubview(cardView)
-                        switch cardView.card.state {
-                        case .isInDeck:
-                            cardView.isHidden = true
-                        case .isBeingDealt:
-                            // frame of dealButton relative to setView
-                            let initialFrame = CGRect(
-                                x: dealButton.frame.origin.x - setView.frame.origin.x,
-                                y: dealButton.frame.origin.y - setView.frame.origin.y,
-                                width: dealButton.bounds.width,
-                                height: 2.0 * dealButton.bounds.height
-                            )
-                            cardView.frame = initialFrame
-                            cardView.isHidden = false
-                        case .isInPlay:
-                            cardView.isHidden = false
-                        case .isSelected:
-                            cardView.isHidden = false
-                        case .isMismatched:
-                            cardView.isHidden = false
-                        case .isMatched:
-                            let newCardView = SetCardView(card: cardView.card, frame: cardView.frame)
-                            cardView.removeFromSuperview()
-                            setView.addSubview(newCardView)
-                            newCardView.isHidden = false
-                            flyawayBehavior.addItem(newCardView)
-                            Timer.scheduledTimer(
-                                withTimeInterval: 1,
-                                repeats: false,
-                                block: { timer in
-                                    self.flyawayBehavior.removeItem(newCardView)
-                                    // frame of scoreLabel relative to self.view
-                                    let finalFrame = CGRect(
-                                        x: self.scoreLabel.frame.origin.x,
-                                        y: self.scoreLabel.frame.origin.y,
-                                        width: self.scoreLabel.bounds.width,
-                                        height: 2.0 * self.scoreLabel.bounds.height
-                                    )
-                                    let snap = UISnapBehavior(item: newCardView, snapTo: CGPoint(x: finalFrame.midX, y: finalFrame.midY))
-                                    snap.damping = 0.5
-                                    self.animator.addBehavior(snap)
-                                    UIViewPropertyAnimator.runningPropertyAnimator(
-                                        withDuration: 0.1,
-                                        delay: 0,
-                                        options: [],
-                                        animations: {
-                                            newCardView.bounds.size = finalFrame.size
-                                        }
-                                    )
-                                }
-                            )
-                        case .isDiscarded:
-                            cardView.isHidden = true
-                        }
-                        cardViews.remove(at: index)
-                        break
+            for case let (index, cardView) as (Int, SetCardView) in cardViews.enumerated() {
+                if cardView.card == card {
+                    setView.addSubview(cardView)
+                    switch cardView.card.state {
+                    case .isBeingDealt:
+                        // frame of dealButton (with twice the height) in setView coordinate space
+                        let frame = CGRect(
+                            x: dealButton.frame.origin.x - setView.frame.origin.x,
+                            y: dealButton.frame.origin.y - setView.frame.origin.y,
+                            width: dealButton.frame.width,
+                            height: 2.0 * dealButton.frame.height
+                        )
+                        cardView.frame = frame
+                        cardView.isHidden = false
+                        cardView.setNeedsDisplay()
+                    case .isMatched:
+                        cardView.removeFromSuperview()
+                        let newCardView = SetCardView(card: cardView.card, frame: cardView.frame)
+                        setView.addSubview(newCardView)
+                        newCardView.isHidden = false
+                        flyawayBehavior.addItem(newCardView)
+                        Timer.scheduledTimer(
+                            withTimeInterval: 0.5,
+                            repeats: false,
+                            block: { timer in
+                                self.flyawayBehavior.removeItem(newCardView)
+                                // frame of scoreLabel (with twice the height) in self.view coordinate space
+                                let frame = CGRect(
+                                    x: self.scoreLabel.frame.origin.x,
+                                    y: self.scoreLabel.frame.origin.y,
+                                    width: self.scoreLabel.frame.width,
+                                    height: 2.0 * self.scoreLabel.frame.height
+                                )
+                                let snap = UISnapBehavior(item: newCardView, snapTo: CGPoint(x: frame.midX, y: frame.midY))
+                                snap.damping = 0.5
+                                self.animator.addBehavior(snap)
+                                UIViewPropertyAnimator.runningPropertyAnimator(
+                                    withDuration: 0.1,
+                                    delay: 0,
+                                    options: [],
+                                    animations: {
+                                        newCardView.bounds.size = frame.size
+                                    }
+                                )
+                            }
+                        )
+                    case .isInDeck, .isDiscarded:
+                        cardView.isHidden = true
+                    default:
+                        cardView.isHidden = false
                     }
+                    cardViews.remove(at: index)
+                    break
                 }
             }
         }
@@ -163,6 +133,14 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
         }
     }
 
+    private func updateScoreLabel() {
+        if set.score == 1 {
+            scoreLabel.text = "1 Set"
+        } else {
+            scoreLabel.text = "\(set.score) Sets"
+        }
+    }
+    
     func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
         let matchedSubviews = setView.subviews.filter {
             if let cardView = $0 as? SetCardView {
