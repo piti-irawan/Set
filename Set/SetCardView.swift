@@ -48,17 +48,17 @@ class SetCardView: UIView {
         case .isInPlay: UIColor.white.setFill()
         case .isSelected: UIColor.white.setFill()
         case .isMismatched: UIColor.orange.setFill()
-        case .isMatched: UIColor.white.setFill()
+        case .isBeingDiscarded: UIColor.white.setFill()
         case .isDiscarded: UIColor.lightGray.setFill()
         }
         roundedRect.fill()
-        if card.state == .isSelected || card.state == .isMismatched || card.state == .isMatched {
+        if card.state == .isSelected || card.state == .isMismatched || card.state == .isBeingDiscarded {
             roundedRect.lineWidth = borderWidth
             UIColor.black.setStroke()
             roundedRect.stroke()
         }
         
-        if card.state == .isInPlay || card.state == .isSelected || card.state == .isMismatched || card.state == .isMatched {
+        if card.state == .isInPlay || card.state == .isSelected || card.state == .isMismatched || card.state == .isBeingDiscarded {
             var path = UIBezierPath()
             var transforms = [CGAffineTransform]()
             let pathRect = CGRect(

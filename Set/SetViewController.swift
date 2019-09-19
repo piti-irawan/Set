@@ -37,7 +37,7 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     }
     
     @objc func chooseCard(_ sender: UITapGestureRecognizer) {
-        if sender.state == .ended && set.cardsBeingDealt.count == 0 && set.matchedCards.count == 0 {
+        if sender.state == .ended && set.cardsBeingDealt.count == 0 && set.cardsBeingDiscarded.count == 0 {
             if let cardView = sender.view as? SetCardView {
                 set.chooseCard(cardView.card)
                 updateViewFromModel()
@@ -47,7 +47,7 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     }
     
     @IBAction private func touchDealButton(_ sender: UIButton) {
-        if set.canDealThreeMoreCards() && set.cardsBeingDealt.count == 0 && set.matchedCards.count == 0 {
+        if set.canDealThreeMoreCards() && set.cardsBeingDealt.count == 0 && set.cardsBeingDiscarded.count == 0 {
             set.dealThreeMoreCards()
             updateViewFromModel()
         }
@@ -81,7 +81,7 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
                         cardView.frame = frame
                         cardView.isHidden = false
                         cardView.setNeedsDisplay()
-                    case .isMatched:
+                    case .isBeingDiscarded:
                         cardView.removeFromSuperview()
                         let newCardView = SetCardView(card: cardView.card, frame: cardView.frame)
                         setView.addSubview(newCardView)
@@ -144,7 +144,7 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
         let matchedSubviews = setView.subviews.filter {
             if let cardView = $0 as? SetCardView {
-                return cardView.card.state == .isMatched
+                return cardView.card.state == .isBeingDiscarded
             } else {
                 return false
             }

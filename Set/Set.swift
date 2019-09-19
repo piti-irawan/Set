@@ -26,8 +26,8 @@ class Set {
     var mismatchedCards: [SetCard] {
         return cards.filter { $0.state == .isMismatched }
     }
-    var matchedCards: [SetCard] {
-        return cards.filter { $0.state == .isMatched }
+    var cardsBeingDiscarded: [SetCard] {
+        return cards.filter { $0.state == .isBeingDiscarded }
     }
     
     init(initialNumberOfCardsInPlay: Int) {
@@ -79,7 +79,7 @@ class Set {
                                         // Replace selectedCard with replacementCard to preserve card order
                                         cards[selectedIndex] = replacementCard
                                         cards[replacementIndex] = selectedCard
-                                        selectedCard.state = .isMatched
+                                        selectedCard.state = .isBeingDiscarded
                                         replacementCard.state = .isBeingDealt
                                     }
                                 }
@@ -87,7 +87,7 @@ class Set {
                         }
                     } else {
                         for selectedCard in selectedCards {
-                            selectedCard.state = .isMatched
+                            selectedCard.state = .isBeingDiscarded
                         }
                     }
                 } else {

@@ -13,7 +13,7 @@ class SetView: UIView {
         var grid = Grid(layout: Grid.Layout.aspectRatio(CGFloat(SetCardView.cardAspectRatio)), frame: bounds)
         let visibleSubviews = subviews.filter {
             if let cardView = $0 as? SetCardView {
-                return !cardView.isHidden && cardView.card.state != .isMatched
+                return !cardView.isHidden && cardView.card.state != .isBeingDiscarded
             } else {
                 return false
             }

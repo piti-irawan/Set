@@ -42,7 +42,7 @@ class SetCard: Equatable, CustomStringConvertible {
         case isInPlay
         case isSelected
         case isMismatched
-        case isMatched
+        case isBeingDiscarded
         case isDiscarded
     }
     
