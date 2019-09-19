@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4Zq-3y-gek">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Set-->
+        <scene sceneID="rgQ-p2-mEV">
+            <objects>
+                <viewController id="4Zq-3y-gek" customClass="SetViewController" customModule="Set" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EmO-JY-TMq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cZh-Co-O2P">
+                                <rect key="frame" x="28.5" y="742" width="150" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="cZh-Co-O2P" secondAttribute="height" multiplier="5:4" id="7HM-2v-zul"/>
+                                    <constraint firstAttribute="height" constant="120" id="cEJ-0j-Y81"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <state key="normal" title="Deal">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchDealButton:" destination="4Zq-3y-gek" eventType="touchUpInside" id="heU-ca-qgw"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Sets" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ifb-9w-0AU">
+                                <rect key="frame" x="235.5" y="742" width="150" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ifb-9w-0AU" secondAttribute="height" multiplier="5:4" id="LlL-Rb-k6e"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="BqP-gm-DdN" customClass="SetView" customModule="Set" customModuleProvider="target">
+                                <rect key="frame" x="20" y="44" width="374" height="690"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cZh-Co-O2P" firstAttribute="height" secondItem="ifb-9w-0AU" secondAttribute="height" id="5m6-dI-UYC"/>
+                            <constraint firstItem="pGO-qx-DzK" firstAttribute="trailing" secondItem="BqP-gm-DdN" secondAttribute="trailing" constant="20" id="Gls-7p-RXK"/>
+                            <constraint firstItem="BqP-gm-DdN" firstAttribute="leading" secondItem="pGO-qx-DzK" secondAttribute="leading" constant="20" id="Gu9-bS-a5w"/>
+                            <constraint firstItem="pGO-qx-DzK" firstAttribute="bottom" secondItem="cZh-Co-O2P" secondAttribute="bottom" id="Zee-4L-c0o"/>
+                            <constraint firstItem="pGO-qx-DzK" firstAttribute="bottom" secondItem="ifb-9w-0AU" secondAttribute="bottom" id="bUl-Rz-JQI"/>
+                            <constraint firstItem="cZh-Co-O2P" firstAttribute="centerX" secondItem="pGO-qx-DzK" secondAttribute="centerX" multiplier="0.5" id="csz-hx-EDd"/>
+                            <constraint firstItem="cZh-Co-O2P" firstAttribute="top" secondItem="BqP-gm-DdN" secondAttribute="bottom" constant="8" symbolic="YES" id="q5g-hd-R4E"/>
+                            <constraint firstItem="BqP-gm-DdN" firstAttribute="top" secondItem="pGO-qx-DzK" secondAttribute="top" id="r98-yZ-AaM"/>
+                            <constraint firstItem="ifb-9w-0AU" firstAttribute="centerX" secondItem="pGO-qx-DzK" secondAttribute="centerX" multiplier="1.5" id="sWn-EL-Chg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="pGO-qx-DzK"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Set" id="tGL-fJ-qCc"/>
+                    <connections>
+                        <outlet property="dealButton" destination="cZh-Co-O2P" id="Dvb-jP-dZv"/>
+                        <outlet property="scoreLabel" destination="ifb-9w-0AU" id="GJm-pn-G1m"/>
+                        <outlet property="setView" destination="BqP-gm-DdN" id="Gw3-a0-Vry"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1dg-NA-JMV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-465.21739130434787" y="-589.28571428571422"/>
+        </scene>
+    </scenes>
+</document>
