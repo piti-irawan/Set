@@ -15,24 +15,19 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     private lazy var animator = UIDynamicAnimator(referenceView: view)
     private lazy var flyawayBehavior = FlyawayBehavior(in: animator)
     
-    @IBOutlet weak var setView: SetView! {
-        didSet {
-            for card in set.cards {
-                let cardView = SetCardView(card: card, frame: CGRect())
-                setView.addSubview(cardView)
-                let tap = UITapGestureRecognizer(target: self, action: #selector(chooseCard(_:)))
-                cardView.addGestureRecognizer(tap)
-            }
-        }
-    }
-    
+    @IBOutlet weak var setView: SetView!
     @IBOutlet weak var dealButton: UIButton!
-    
     @IBOutlet private weak var scoreLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         animator.delegate = self
+        for card in set.cards {
+            let cardView = SetCardView(card: card, frame: CGRect())
+            setView.addSubview(cardView)
+            let tap = UITapGestureRecognizer(target: self, action: #selector(chooseCard(_:)))
+            cardView.addGestureRecognizer(tap)
+        }
         updateSetView()
     }
     
