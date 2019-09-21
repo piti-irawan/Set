@@ -20,13 +20,13 @@ class FlyawayBehavior: UIDynamicBehavior {
         animator.addBehavior(self)
     }
     
-    lazy var collisionBehavior: UICollisionBehavior = {
+    private lazy var collisionBehavior: UICollisionBehavior = {
         let behavior = UICollisionBehavior()
         behavior.translatesReferenceBoundsIntoBoundary = true
         return behavior
     }()
     
-    lazy var itemBehavior: UIDynamicItemBehavior = {
+    private lazy var itemBehavior: UIDynamicItemBehavior = {
         let behavior = UIDynamicItemBehavior()
         behavior.allowsRotation = true
         behavior.elasticity = 1.0

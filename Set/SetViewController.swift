@@ -15,8 +15,8 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     private lazy var animator = UIDynamicAnimator(referenceView: view)
     private lazy var flyawayBehavior = FlyawayBehavior(in: animator)
     
-    @IBOutlet weak var setView: SetView!
-    @IBOutlet weak var dealButton: UIButton!
+    @IBOutlet private weak var setView: SetView!
+    @IBOutlet private weak var dealButton: UIButton!
     @IBOutlet private weak var scoreLabel: UILabel!
     
     override func viewDidLoad() {
@@ -81,7 +81,7 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
             Timer.scheduledTimer(
                 withTimeInterval: 0.5,
                 repeats: false,
-                block: { [unowned self] timer in
+                block: { timer in
                     self.flyawayBehavior.removeItem(cardView)
                     // frame of scoreLabel (with twice the height) in self.view coordinate space
                     let frame = CGRect(
@@ -91,7 +91,6 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
                         height: 2.0 * self.scoreLabel.frame.height
                     )
                     let snap = UISnapBehavior(item: cardView, snapTo: CGPoint(x: frame.midX, y: frame.midY))
-                    snap.damping = 0.5
                     self.animator.addBehavior(snap)
                     UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: 0.1,
@@ -124,6 +123,9 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
     }
     
     func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
+        for behavior in animator.behaviors.filter({ $0 is UISnapBehavior }) {
+            animator.removeBehavior(behavior)
+        }
         for cardView in setView.cardViewsBeingDiscarded {
             UIView.transition(
                 with: cardView,
@@ -133,9 +135,7 @@ class SetViewController: UIViewController, UIDynamicAnimatorDelegate {
                     cardView.card.state = .isDiscarded
                     cardView.setNeedsDisplay()
                 },
-                completion: { [unowned self] finished in
-                    animator.removeAllBehaviors()
-                    animator.addBehavior(self.flyawayBehavior)
+                completion: { finished in
                     cardView.isHidden = true
                     cardView.setNeedsDisplay()
                 }

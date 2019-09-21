@@ -29,7 +29,7 @@ class SetView: UIView {
             withDuration: 0.5,
             delay: 0,
             options: [],
-            animations: { [unowned self] in
+            animations: {
                 for (index, cardView) in self.cardViewsInGrid.enumerated() {
                     if cardView.card.state != .isBeingDealt {
                         if let frame = grid[index] {
@@ -39,7 +39,7 @@ class SetView: UIView {
                     }
                 }
             },
-            completion: { [unowned self] finished in
+            completion: { finished in
                 var delayMultiplier = 0.0
                 for (index, cardView) in self.cardViewsInGrid.enumerated() {
                     if cardView.card.state == .isBeingDealt {

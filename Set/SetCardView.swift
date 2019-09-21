@@ -11,9 +11,9 @@ import UIKit
 class SetCardView: UIView {
     static let cardAspectRatio = 0.625
     static let frameInset: CGFloat = 0.5
-    static let cornerRadiusToBoundsHeight: CGFloat = 0.06
-    static let lineWidthToBoundsHeight: CGFloat = 0.06
-    static let halfRectHeightToBoundsHeight: CGFloat = 0.06
+    static private let cornerRadiusToBoundsHeight: CGFloat = 0.06
+    static private let lineWidthToBoundsHeight: CGFloat = 0.06
+    static private let halfRectHeightToBoundsHeight: CGFloat = 0.06
     private var cornerRadius: CGFloat {
         return bounds.size.height * SetCardView.cornerRadiusToBoundsHeight
     }
