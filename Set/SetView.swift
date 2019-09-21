@@ -9,22 +9,28 @@
 import UIKit
 
 class SetView: UIView {
+    var cardViews: [SetCardView] {
+        return subviews.compactMap { $0 as? SetCardView }
+    }
+    var cardViewsBeingDealt: [SetCardView] {
+        return cardViews.filter { $0.card.state == .isBeingDealt }
+    }
+    var cardViewsBeingDiscarded: [SetCardView] {
+        return cardViews.filter { $0.card.state == .isBeingDiscarded }
+    }
+    var cardViewsInGrid: [SetCardView] {
+        return cardViews.filter { !$0.isHidden && $0.card.state != .isBeingDiscarded && $0.card.state != .isDiscarded }
+    }
+
     override func draw(_ rect: CGRect) {
         var grid = Grid(layout: Grid.Layout.aspectRatio(CGFloat(SetCardView.cardAspectRatio)), frame: bounds)
-        let visibleSubviews = subviews.filter {
-            if let cardView = $0 as? SetCardView {
-                return !cardView.isHidden && cardView.card.state != .isBeingDiscarded
-            } else {
-                return false
-            }
-        }
-        grid.cellCount = visibleSubviews.count
+        grid.cellCount = cardViewsInGrid.count
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.5,
             delay: 0,
             options: [],
-            animations: {
-                for case let (index, cardView) as (Int, SetCardView) in visibleSubviews.enumerated() {
+            animations: { [unowned self] in
+                for (index, cardView) in self.cardViewsInGrid.enumerated() {
                     if cardView.card.state != .isBeingDealt {
                         if let frame = grid[index] {
                             cardView.frame = frame.insetBy(dx: SetCardView.frameInset, dy: SetCardView.frameInset)
@@ -33,9 +39,9 @@ class SetView: UIView {
                     }
                 }
             },
-            completion: { finished in
+            completion: { [unowned self] finished in
                 var delayMultiplier = 0.0
-                for case let (index, cardView) as (Int, SetCardView) in visibleSubviews.enumerated() {
+                for (index, cardView) in self.cardViewsInGrid.enumerated() {
                     if cardView.card.state == .isBeingDealt {
                         if let frame = grid[index] {
                             UIViewPropertyAnimator.runningPropertyAnimator(

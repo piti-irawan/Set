@@ -44,8 +44,10 @@ class Set {
             }
         }
         cards.shuffle()
-        for index in 0...initialNumberOfCardsInPlay-1 {
-            cards[index].state = .isBeingDealt
+        if initialNumberOfCardsInPlay > 0 {
+            for index in 0...initialNumberOfCardsInPlay-1 {
+                cards[index].state = .isBeingDealt
+            }
         }
     }
     
